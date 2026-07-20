@@ -24,8 +24,12 @@ public class MainActivity extends Activity {
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
         s.setMediaPlaybackRequiresUserGesture(false);
-        s.setUseWideViewPort(true);
-        s.setLoadWithOverviewMode(true);
+        // The board scales itself to fill the screen; let the WebView use the real screen size
+        // (not the page's 1920px content width) so it isn't zoomed out to fit.
+        s.setUseWideViewPort(false);
+        s.setLoadWithOverviewMode(false);
+        s.setBuiltInZoomControls(false);
+        s.setSupportZoom(false);
         web.setWebViewClient(new WebViewClient());
         web.setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
