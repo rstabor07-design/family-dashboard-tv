@@ -1,4 +1,4 @@
-plugins { id 'com.android.application' }
+apply plugin: 'com.android.application'
 
 android {
     namespace 'com.ourfamilydashboard.tv'
@@ -8,8 +8,8 @@ android {
         applicationId "com.ourfamilydashboard.tv"
         minSdk 24
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
 
     signingConfigs {
