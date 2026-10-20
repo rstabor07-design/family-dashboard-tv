@@ -15,10 +15,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - uses: android-actions/setup-android@v3
-
+      # The runner already has the Android SDK (ANDROID_HOME); install what this build needs with its sdkmanager.
+      # (android-actions/setup-android@v3 started failing in Oct 2026.)
       - name: Install SDK packages
-        run: sdkmanager "platforms;android-36" "build-tools;35.0.0" "build-tools;36.0.0"
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKM" ] || SDKM="$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | tail -1)"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;35.0.0" "build-tools;36.0.0"
 
       - uses: gradle/actions/setup-gradle@v4
         with:
