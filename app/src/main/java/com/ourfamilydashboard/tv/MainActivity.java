@@ -2,6 +2,7 @@ package com.ourfamilydashboard.tv;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.window.OnBackInvokedDispatcher;
 
 public class MainActivity extends Activity {
     private static final String START_URL = "https://ourfamilydashboard.com/tv";
@@ -35,6 +37,12 @@ public class MainActivity extends Activity {
             View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         web.loadUrl(START_URL);
+        // Android 13+: the remote's Back button arrives here (from Android 16 it no longer reaches onKeyDown)
+        if (Build.VERSION.SDK_INT >= 33) {
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, () -> {
+                if (web != null && web.canGoBack()) web.goBack(); else finish();
+            });
+        }
     }
 
     @Override public boolean onKeyDown(int k, KeyEvent e) {
